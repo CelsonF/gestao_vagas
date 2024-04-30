@@ -33,6 +33,7 @@ public class JobEntity {
     private CompanyEntity companyEntity;
 
     @Column(name = "company_id")
+    @NotBlank
     private UUID companyId;
 
     @CreationTimestamp
