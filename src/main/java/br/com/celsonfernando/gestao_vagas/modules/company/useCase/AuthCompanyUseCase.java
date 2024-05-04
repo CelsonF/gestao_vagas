@@ -1,5 +1,8 @@
 package br.com.celsonfernando.gestao_vagas.modules.company.useCase;
 
+import java.time.Instant;
+import java.time.Duration;
+
 import javax.naming.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,7 @@ import br.com.celsonfernando.gestao_vagas.modules.company.repositories.CompanyRe
 
 @Service
 public class AuthCompanyUseCase {
-    
+
     @Value("${security.token.secret}")
     private String secretKey;
 
@@ -35,14 +38,15 @@ public class AuthCompanyUseCase {
 
         var passwordMatches = this.passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword());
 
-        if(!passwordMatches) {
+        if (!passwordMatches) {
             throw new AuthenticationException();
         }
-        
+
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         var token = JWT.create().withIssuer("javagas")
-        .withSubject(company.getId().toString())
-        .sign(algorithm);
+                .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+                .withSubject(company.getId().toString())
+                .sign(algorithm);
 
         return token;
     }
