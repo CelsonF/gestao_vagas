@@ -25,14 +25,13 @@ public class SecurityConfig {
             .requestMatchers("/auth/company").permitAll();
             auth.anyRequest().authenticated();
         })
-        .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)
-        ;
-
+        .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
+        
         return http.build();
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

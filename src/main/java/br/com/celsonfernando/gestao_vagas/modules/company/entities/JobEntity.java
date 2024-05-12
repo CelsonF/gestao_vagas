@@ -22,10 +22,11 @@ public class JobEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    
     private String description;
     private String benefits;
     
-    @NotBlank(message = "This filed is required")
+    @NotBlank(message = "This field is required")
     private String level;
 
     @ManyToOne
@@ -33,7 +34,6 @@ public class JobEntity {
     private CompanyEntity companyEntity;
 
     @Column(name = "company_id")
-    @NotBlank
     private UUID companyId;
 
     @CreationTimestamp
