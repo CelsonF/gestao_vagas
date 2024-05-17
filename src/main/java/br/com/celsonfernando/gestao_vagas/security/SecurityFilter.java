@@ -23,9 +23,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request,
-    @SuppressWarnings("null") HttpServletResponse response,
-    @SuppressWarnings("null") FilterChain filterChain)
+    protected void doFilterInternal(@SuppressWarnings("") HttpServletRequest request,
+    @SuppressWarnings("") HttpServletResponse response,
+    @SuppressWarnings("") FilterChain filterChain)
             throws ServletException, IOException {
                 SecurityContextHolder.getContext().setAuthentication(null);
                 String header = request.getHeader("Authorization");
