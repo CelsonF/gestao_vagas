@@ -1,4 +1,4 @@
-package br.com.celsonfernando.gestao_vagas.modules.providers;
+package br.com.celsonfernando.gestao_vagas.providers;
 
 
 import org.springframework.beans.factory.annotation.Value;
