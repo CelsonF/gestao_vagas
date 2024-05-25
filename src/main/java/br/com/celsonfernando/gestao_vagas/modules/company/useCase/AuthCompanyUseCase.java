@@ -1,6 +1,8 @@
 package br.com.celsonfernando.gestao_vagas.modules.company.useCase;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.time.Duration;
 
 import javax.naming.AuthenticationException;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.celsonfernando.gestao_vagas.modules.company.dto.AuthCompanyDTO;
+import br.com.celsonfernando.gestao_vagas.modules.company.dto.AuthCompanyResponseDTO;
 import br.com.celsonfernando.gestao_vagas.modules.company.repositories.CompanyRepository;
 
 @Service
@@ -30,7 +33,7 @@ public class AuthCompanyUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+    public AuthCompanyResponseDTO execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
         var company = this.companyRepository.findByUsername(authCompanyDTO.getUsername()).orElseThrow(
                 () -> {
                     throw new UsernameNotFoundException("Company not found.");
@@ -43,11 +46,22 @@ public class AuthCompanyUseCase {
         }
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        var token = JWT.create().withIssuer("javagas")
-                .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
-                .withSubject(company.getId().toString())
-                .sign(algorithm);
+        
+        var expiresIn = Instant.now().plus(Duration.ofHours(2));
+        
+        var token = JWT.create()
+            .withIssuer("javagas")
+            .withSubject(company.getId().toString())
+            .withExpiresAt(expiresIn)
+            .withClaim("roles", Arrays.asList("COMPANY"))
+            .sign(algorithm);
 
-        return token;
+        var authCompanyResponseDTO = AuthCompanyResponseDTO.builder()
+            .access_token(token)
+            .expires_in(expiresIn.toEpochMilli())
+            .build();
+
+
+        return authCompanyResponseDTO;
     }
 }
