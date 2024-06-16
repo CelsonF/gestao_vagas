@@ -2,7 +2,6 @@ package br.com.celsonfernando.gestao_vagas.modules.company.useCase;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.lang.reflect.Array;
 import java.time.Duration;
 
 import javax.naming.AuthenticationException;
